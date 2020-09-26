@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Mongo</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Node.js and Mongodb</h1>
+      <p id="userName"></p>
+      <div class="row">
+        <input type="text" class="form-control addUserName" />
+        <div class="btn btn-success mt-2 add-user">Add User</div>
+      </div>
+    </div>
+    <script>
+      fetch("http://localhost:3000/user/3")
+        .then((res) => res.json())
+        .then((user) => {
+          document.getElementById("userName").innerText = user.name;
+        });
+
+      const addUserBtn = document.querySelector(".add-user");
+
+      addUserBtn.addEventListener("click", () => {
+        const name = document.querySelector(".addUserName").value;
+        console.log("Name", name);
+        const user = { name };
+        fetch("http://localhost:3000/user", {
+          method: "POST",
+          body: JSON.stringify(user),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((res) => res.json())
+          .then((user) => updateUserName(user));
+      });
+
+      const updateUserName = (user) => {
+        document.getElementById("userName").innerText = user.name;
+      };
+    </script>
+  </body>
+</html>
