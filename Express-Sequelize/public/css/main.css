@@ -87,14 +87,6 @@ form {
   padding: 0;
 }
 
-.image {
-  height: 20rem;
-}
-
-.image img {
-  height: 100%;
-}
-
 .mobile-nav__item {
   margin: 1rem;
   padding: 0;
@@ -224,4 +216,12 @@ form {
   #side-menu-toggle {
     display: none;
   }
+}
+
+.image {
+  height: 300px;
+}
+
+.image img {
+  height: 100%;
 }

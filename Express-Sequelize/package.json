@@ -1,5 +1,5 @@
 {
-  "name": "Express Sequelize",
+  "name": "nodejs-complete-guide",
   "version": "1.0.0",
   "description": "Complete Node.js Guide",
   "main": "app.js",
@@ -8,15 +8,15 @@
     "start": "nodemon app.js",
     "start-server": "node app.js"
   },
-  "author": "Nur A Alam",
+  "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.18.3"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "ejs": "^3.1.5",
-    "express": "^4.17.1",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "mysql2": "^2.2.5",
     "pug": "^2.0.3",
