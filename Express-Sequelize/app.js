@@ -2,7 +2,9 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const sequelize = require("./models/product");
+const sequelize = require("./util/database");
+const User = require("./models/user");
+const Product = require("./models/product");
 
 const errorController = require("./controllers/error");
 
@@ -22,8 +24,13 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
+User.hasMany(Product);
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
 sequelize
-  .sync()
+  .sync({
+    force: true,
+  })
   .then(() => {
     app.listen(3000, () => console.log("Server started on port 3000"));
   })
