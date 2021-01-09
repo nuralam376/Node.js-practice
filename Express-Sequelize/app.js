@@ -19,6 +19,19 @@ const shopRoutes = require("./routes/shop");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use((req, res, next) => {
+  User.findOne(1)
+    .then((user) => {
+      if (user) {
+        req.user = user;
+      }
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
@@ -30,6 +43,15 @@ Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 sequelize
   .sync({
     force: true,
+  })
+  .then(() => {
+    return User.findOne(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({ name: "Abc", email: "abc@gmail.com " });
+    }
+    return user;
   })
   .then(() => {
     app.listen(3000, () => console.log("Server started on port 3000"));
