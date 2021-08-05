@@ -8,25 +8,40 @@ import {
   Patch,
   Post,
   Query,
+  Session,
+  UseGuards,
 } from '@nestjs/common';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { AuthServices } from './auth.service';
+import { CurrentUser } from './decorators/custom-user.decorator';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
+import { AuthGuard } from './guards/auth.guard';
+import { User } from './user.entity';
 import { UsersService } from './users.service';
 
 @Controller('auth')
 @Serialize(UserDto)
+// @UseInterceptors(CurrentUserInterceptor)
 export class UsersController {
   constructor(
     private userService: UsersService,
     private authService: AuthServices,
   ) {}
-  @Post('signup')
-  createUser(@Body() body: CreateUserDto) {
+  @Post('/signup')
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
     // return this.userService.create(body.email, body.password);
-    return this.authService.signup(body.email, body.password);
+    const user = await this.authService.signup(body.email, body.password);
+    session.userId = user.id;
+    return user;
+  }
+
+  @Post('/signin')
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signin(body.email, body.password);
+    session.userId = user.id;
+    return user;
   }
 
   @Get('users/:id')
@@ -65,5 +80,31 @@ export class UsersController {
     }
 
     return this.userService.update(+id, body);
+  }
+
+  @Get('/colors/:color')
+  setColor(@Param('color') color: string, @Session() session: any) {
+    session.color = color;
+  }
+
+  @Get('colors')
+  getColor(@Session() session: any) {
+    return session.color;
+  }
+
+  // @Get('access')
+  // getAccess(@Session() session: any) {
+  //   return this.userService.findOne(session.userId);
+  // }
+
+  @Get('access')
+  @UseGuards(AuthGuard)
+  getAccess(@CurrentUser() user: User) {
+    return user;
+  }
+
+  @Get('signout')
+  signOut(@Session() session: any) {
+    session.userId = null;
   }
 }
