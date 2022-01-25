@@ -16,6 +16,11 @@ export class UserController {
         return this.userService.postUser(user);
     }
 
+    @Get("/:username")
+    getUser(@Param("username") username : string) : User {
+        return this.userService.getUser(username);
+    }
+
     @Delete("/:email")
     deleteUser(@Param('email') email : string) {
         return this.userService.deleteUser(email);
