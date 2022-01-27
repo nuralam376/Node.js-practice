@@ -4,7 +4,7 @@ import { User } from "./interface/user.interface";
 @Injectable()
 export class UserService {
     public users : User[] = [];
-    getAllUsers() : User[] {
+    async getAllUsers() : Promise<User[]> {
         return this.users;
     }
 
