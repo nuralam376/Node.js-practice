@@ -8,11 +8,11 @@ export class UserService {
         return this.users;
     }
 
-    getUser(username : string) : User {
+    async getUser(username : string) : Promise<User> {
         const users = this.users.filter(user => user.username === username);
 
         if(users && Array.isArray(users) && users.length > 0) {
-            return users[0];
+            return Promise.resolve(users[0]);
         }
 
         throw new NotFoundException({
