@@ -14,8 +14,13 @@ export class TaskService {
         return Promise.resolve(task);
     }
 
-    async addTask(task : Task) : Promise<Task> {
+    async addTask(task : Task) {
         this.tasks.push(task);
         return Promise.resolve(task);
+    }
+
+    async deleteTask(id : string) : Promise<Task []> {
+        const tasks = this.tasks.filter(task => task.id != id);
+        return Promise.resolve(tasks);
     }
 }

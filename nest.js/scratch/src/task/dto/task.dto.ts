@@ -1,7 +1,14 @@
+import { IsDefined, IsNotEmpty, IsString } from "class-validator";
+
 export class TaskDTO {
-    id : string;
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
     name : string;
-    owner : string;
-    duration: number;
+
+    id : string;
     completed: boolean;
+    owner: string;
+    duration: number;
+
 }

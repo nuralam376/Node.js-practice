@@ -1,4 +1,5 @@
-import { Body, Controller, Get , Param, Post} from "@nestjs/common";
+import { Body, Controller, Delete, Get , Param, Post} from "@nestjs/common";
+import { TaskDTO } from "./dto/task.dto";
 import { Task } from "./interface/task.interface";
 import { TaskService } from "./task.service";
 
@@ -16,9 +17,13 @@ export class TaskController {
     }
 
     @Post()
-    async addTask(@Body() task : Task) : Promise<Task> {
+    async addTask(@Body() task : TaskDTO) : Promise<Task> {
         return await this.taskService.addTask(task);
     }
 
+    @Delete(':id')
+    async deleteTask(@Param('id') id : string) : Promise<Task []> {
+        return await this.taskService.deleteTask(id);
+    }
 
 }
