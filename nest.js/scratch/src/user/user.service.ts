@@ -1,15 +1,22 @@
 import { Body, Injectable, NotFoundException } from "@nestjs/common";
-import { User } from "./interface/user.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { User } from "../database/entity/user.entity";
 
 @Injectable()
 export class UserService {
-    public users : User[] = [];
+    constructor(
+        @InjectRepository(User)
+        private userRepository: Repository<User>
+    ) {}
     async getAllUsers() : Promise<User[]> {
-        return this.users;
+        return this.userRepository.find({});
     }
 
-    async getUser(username : string) : Promise<User> {
-        const users = this.users.filter(user => user.username === username);
+    async getUser(id : number) : Promise<User> {
+        const users = this.userRepository.findOne({
+            id : id
+        });
 
         if(users && Array.isArray(users) && users.length > 0) {
             return Promise.resolve(users[0]);
@@ -20,16 +27,15 @@ export class UserService {
         });
     }
 
-    postUser(user : User) : User {
-        if(user) {
-            this.users.push(user);
-        }
-        return user;
+    async postUser(user : User) : Promise<User> {
+        const userDetails = new User();
+
+        return await this.userRepository.save(userDetails);
     }
 
-    deleteUser(email : string) : User [] {
-        const remainingUser = this.users.filter(user => user.email != email);
-        this.users = remainingUser;
-        return remainingUser;
+    async deleteUser(id : number) {
+        await this.userRepository.delete({
+            id : id
+        });
     }
 }

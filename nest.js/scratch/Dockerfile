@@ -1,11 +1,10 @@
 FROM node:carbon
-
+# Create app directory
 WORKDIR /usr/src/app
-
+# Bundle app source
 COPY . .
-
-RUN npm install
-
+# npm install
+RUN  npm install
+# Run npm install --global grpc --unsafe-perm
 EXPOSE 3000 9204
-
-cmd ["npm", "run", "start:dev"]
+CMD [ "npm", "run", "start:dev" ]
