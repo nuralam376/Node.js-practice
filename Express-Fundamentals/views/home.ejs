@@ -1,0 +1,21 @@
+<%- include("includes/head") %>
+
+<body>
+    <h1>Home Page</h1>
+    <p><%= random %></p>
+    <% if(random === 6) { %>
+        <p>You won!</p>
+    <% } %>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut nulla tenetur sunt minima iusto labore dignissimos quisquam vel alias. Laborum.</p>
+    <h6>Footer</h6>
+
+    <ul>
+    <% for (let name of followers) { %>
+        <li><%= name %></li>
+    <% } %>
+    </ul>
+
+    <%- include("includes/footer") %>
+
+</body>
+</html>

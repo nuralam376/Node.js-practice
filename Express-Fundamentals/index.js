@@ -1,34 +1,36 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 
-const PORT = 3000;
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
+app.use(express.static(path.join(__dirname,"public")));
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
+const PORT = 8080;
 
 app.get("/", (req,res) => {
-    res.send("Root Response");
+    res.send("Welcome!");
 });
 
-app.get("/:username/:id", (req,res) => {
-    const {username, id} = req.params;
-    let htmlStr = `<h1>Welcome to the page of @${username}</h1>`;
-    res.send(htmlStr);
+
+app.get("/home", (req,res) => {
+    let followers = ["Abc", "Def", "Ghi", "Jkl"];
+    let random = Math.floor(Math.random() * 6) + 1;
+    res.render("home" ,{ random, followers });
 });
 
-app.get("/search", (req,res) => {
-    const { q } = req.query;
-
-    if(!q) {
-        return res.send("Nothing searched");
+app.get("/:username", (req,res) => {
+    const { username } = req.params;
+    const instaData = require("./data.json");
+    const data = instaData[username];
+    if(data) {
+        res.render("instagram.ejs", {
+            data
+        }); 
+    } else {
+        res.render("error");
     }
-    res.send(`<h1>Search query ${q}</h1>`);
 });
 
-app.post("/", (req,res) => {
-    res.send("Post Request Response");
-});
 
-app.use((req,res) => {
-    res.status(404).send("Route not found");
-})
+app.listen(PORT,() => console.log(`Server started on port ${PORT}`));
